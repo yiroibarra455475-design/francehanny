@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un pequeño París para Hanny ♡</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;font-family:Georgia,"Times New Roman",serif}
+.scene{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;background:linear-gradient(to bottom,#91d9f6 0%,#bce9fa 48%,#f8e5c0 100%);transition:background 5s ease}
+
+/* CIELO */
+.sky-glow{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 15%,rgba(255,220,164,.3) 75%,rgba(255,180,115,.45));transition:opacity 5s}
+.sun{position:absolute;width:95px;height:95px;border-radius:50%;top:11%;right:15%;background:#fff5c6;box-shadow:0 0 55px #fff0ad;transition:all 4s}
+.cloud{position:absolute;width:100px;height:27px;border-radius:30px;background:rgba(255,255,255,.88);animation:drift 48s linear infinite}
+.cloud::before,.cloud::after{content:"";position:absolute;background:inherit;border-radius:50%}
+.cloud::before{width:40px;height:40px;left:16px;bottom:4px}
+.cloud::after{width:51px;height:49px;right:13px;bottom:0}
+.c1{top:13%;left:7%}.c2{top:24%;left:57%;animation-delay:-17s}.c3{top:9%;left:76%;animation-delay:-30s}
+@keyframes drift{from{translate:-15vw 0}to{translate:120vw 0}}
+
+/* ESTRELLAS */
+.stars{position:absolute;inset:0;opacity:0;transition:opacity 5s;pointer-events:none}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff;animation:twinkle 2.5s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.3;transform:scale(.7)}to{opacity:1;transform:scale(1.3)}}
+
+/* COLINAS Y CAMINO */
+.hills{position:absolute;bottom:23%;left:-10%;width:120%;height:23%;border-radius:50% 50% 0 0;background:#9bd4dc;transition:background 5s}
+.hills.back{bottom:25%;left:-20%;width:140%;height:19%;background:#b7e2e7}
+.path{position:absolute;z-index:2;bottom:-2%;left:50%;width:100%;height:45%;transform:translateX(-50%);clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);background:linear-gradient(90deg,#e0dfc9,#f0eedb 50%,#dedec8);transition:background 5s}
+.path::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(175deg,transparent 0 55px,rgba(133,127,105,.08) 56px 58px)}
+
+/* JARDÍN: ÁRBOLES Y FAROLAS (se ordenan por profundidad) */
+.garden{position:absolute;inset:0;z-index:3;pointer-events:none}
+.tree,.lamp{position:absolute;transform:translateX(-50%)}
+.tree svg,.lamp svg{display:block;width:100%;height:100%;overflow:visible}
+.tree{height:calc(var(--h) * .125vh);width:calc(var(--h) * .09vh)}
+.tree svg{transition:filter 5s}
+.lamp{height:calc(var(--h) * .125vh);width:calc(var(--h) * .036vh)}
+.lamp .metal{fill:#3a3d3b;stroke:#3a3d3b}
+.lamp .glass{fill:#fff3c2;stroke:none;transition:filter 4s}
+.lamp .glow{opacity:0;filter:blur(2px);transition:opacity 4s}
+
+/* HOJAS */
+.leaves{position:absolute;z-index:6;inset:0;overflow:hidden;pointer-events:none}
+.leaf{position:absolute;top:-25px;width:10px;height:6px;background:#c4a34f;border-radius:100% 0 100% 0;opacity:0;animation:falling var(--duration) linear var(--delay) infinite}
+@keyframes falling{0%{transform:translate(0,-20px) rotate(0);opacity:0}10%{opacity:.8}50%{transform:translate(35px,50vh) rotate(210deg);opacity:.8}90%{opacity:.6}100%{transform:translate(-25px,105vh) rotate(540deg);opacity:0}}
+
+/* TORRE EIFFEL */
+.eiffel{position:absolute;z-index:4;width:min(44vw,360px);height:min(76vh,650px);height:min(76dvh,650px);min-height:330px;bottom:20%;left:50%;transform:translateX(-50%);overflow:visible;filter:drop-shadow(0 5px 6px rgba(40,45,50,.16))}
+.eiffel svg{width:100%;height:100%;overflow:visible}
+.body{fill:rgba(74,64,59,.13);stroke:none;transition:fill 5s}
+.slab{fill:rgba(74,64,59,.5);stroke:none;transition:fill 5s}
+.iron,.iron-thin{fill:none;stroke:#4a403b;stroke-linecap:round;stroke-linejoin:round;transition:stroke 5s,filter 5s}
+.iron{stroke-width:2.5}
+.iron-thin{stroke-width:1.1}
+.tower-lights{opacity:0;transition:opacity 4s}
+.tower-lights circle{animation:glint 2.2s ease-in-out infinite alternate}
+.tower-lights circle:nth-child(3n){animation-delay:-.7s}
+.tower-lights circle:nth-child(3n+1){animation-delay:-1.4s}
+@keyframes glint{from{opacity:.5}to{opacity:1}}
+
+/* BOTÓN */
+.continue-button{position:absolute;z-index:10;left:50%;bottom:6%;transform:translateX(-50%);padding:14px 43px;border:1px solid rgba(255,255,255,.9);border-radius:40px;color:#fff;background:rgba(70,95,105,.42);backdrop-filter:blur(8px);font:17px Georgia,serif;letter-spacing:1px;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,.08);transition:background .3s,opacity .6s,transform .3s}
+.continue-button:hover{background:rgba(55,77,90,.68);transform:translate(-50%,-3px)}
+
+/* CARTA */
+.letter-overlay{position:absolute;z-index:20;inset:0;display:grid;place-items:center;padding:20px;background:rgba(17,31,45,.28);backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}
+.letter-overlay.show{opacity:1;visibility:visible}
+.letter{width:min(100%,490px);padding:55px 35px 35px;text-align:center;position:relative;color:#514236;background:radial-gradient(ellipse at 10% 10%,#fffdf1,transparent 65%),linear-gradient(135deg,#f9efd9,#eee0c2);border:1px solid #d9c8a6;box-shadow:0 25px 80px rgba(0,0,0,.25);transform:translateY(35px) scale(.9) rotate(-1deg);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.letter::before{content:"♡";position:absolute;top:14px;left:0;width:100%;color:#b59a75;font-size:21px}
+.letter::after{content:"";position:absolute;inset:10px;border:1px solid rgba(143,112,76,.22);pointer-events:none}
+.letter-overlay.show .letter{transform:translateY(0) scale(1) rotate(0)}
+.letter p{position:relative;z-index:1;font-size:clamp(20px,4vw,25px);line-height:1.65}
+.letter .signature{margin-top:20px;font-size:18px;color:#8a705a}
+.close-letter{position:relative;z-index:2;margin-top:28px;padding:12px 27px;border:1px solid #b5a087;border-radius:30px;background:#756457;color:#fff;font:15px Georgia,serif;cursor:pointer;transition:background .3s,transform .3s}
+.close-letter:hover{background:#51453c;transform:translateY(-2px)}
+
+/* MENSAJE FINAL */
+.final-message{position:absolute;z-index:9;bottom:5%;left:50%;width:90%;transform:translate(-50%,15px);color:#fff8e6;text-align:center;font-size:clamp(17px,3vw,22px);letter-spacing:.5px;line-height:1.6;text-shadow:0 2px 15px #000,0 0 20px #000;opacity:0;transition:opacity 3s,transform 3s;pointer-events:none}
+
+/* MODO NOCHE */
+.scene.night{background:linear-gradient(to bottom,#081329 0%,#172847 48%,#354057 100%)}
+.scene.night .sky-glow{opacity:0}
+.scene.night .sun{opacity:0;transform:translateY(80px)}
+.scene.night .cloud{opacity:0;transition:opacity 3s}
+.scene.night .stars{opacity:1}
+.scene.night .hills{background:#253a43}
+.scene.night .hills.back{background:#1d303a}
+.scene.night .path{background:linear-gradient(90deg,#454951,#66656a,#454951)}
+.scene.night .tree svg{filter:brightness(.48) saturate(.8)}
+.scene.night .iron{stroke:#e0a94e;filter:drop-shadow(0 0 5px rgba(255,188,67,.65))}
+.scene.night .iron-thin{stroke:#ffce71}
+.scene.night .body{fill:rgba(255,190,80,.07)}
+.scene.night .slab{fill:rgba(255,190,80,.28)}
+.scene.night .tower-lights{opacity:1}
+.scene.night .lamp .glow{opacity:1}
+.scene.night .lamp .glass{filter:drop-shadow(0 0 4px #ffd36b)}
+.scene.night .final-message{opacity:1;transform:translate(-50%,0)}
+
+/* CELULAR */
+@media (max-width:600px){
+.eiffel{width:min(68vw,280px);height:53vh;height:53dvh;min-height:300px;bottom:24%}
+.sun{width:65px;height:65px;right:11%}
+.tree{height:calc(var(--h) * .09vh);width:calc(var(--h) * .065vh)}
+.lamp{height:calc(var(--h) * .1vh);width:calc(var(--h) * .036vh)}
+.letter{padding:48px 25px 30px}
+.path{height:39%}
+.continue-button{bottom:5%}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important}}
+</style>
+</head>
+<body>
+<main class="scene" id="scene">
+    <div class="sky-glow"></div>
+    <div class="sun"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="stars" id="stars"></div>
+    <div class="hills back"></div>
+    <div class="hills"></div>
+    <div class="path"></div>
+
+    <div class="garden" id="garden"></div>
+
+    <div class="eiffel">
+        <svg id="tower" viewBox="0 0 300 580" xmlns="http://www.w3.org/2000/svg" aria-label="Torre Eiffel"></svg>
+    </div>
+
+    <div class="leaves" id="leaves"></div>
+
+    <button class="continue-button" id="continueButton">Continuar</button>
+
+    <div class="letter-overlay" id="letterOverlay">
+        <div class="letter">
+            <p>Nunca he visto la Torre Eiffel en persona, pero estoy seguro que no es tan linda como tú.</p>
+            <p class="signature">— Yiro ♡</p>
+            <button class="close-letter" id="closeLetter">Cerrar carta</button>
+        </div>
+    </div>
+
+    <div class="final-message">Buenas noches, Hanny.<br>Disfruta París. ♡</div>
+</main>
+
+<script>
+const scene = document.getElementById("scene");
+const continueButton = document.getElementById("continueButton");
+const letterOverlay = document.getElementById("letterOverlay");
+const closeLetter = document.getElementById("closeLetter");
+const stars = document.getElementById("stars");
+const garden = document.getElementById("garden");
+const leaves = document.getElementById("leaves");
+
+/* ESTRELLAS */
+for (let i = 0; i < 100; i++) {
+    const s = document.createElement("span");
+    s.className = "star";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 70 + "%";
+    s.style.animationDelay = Math.random() * 4 + "s";
+    s.style.animationDuration = (1.5 + Math.random() * 3) + "s";
+    stars.appendChild(s);
+}
+
+/* ================= TORRE EIFFEL (generada con una curva real) ================= */
+(function () {
+    const C = 150, f = n => +n.toFixed(1);
+    // semiancho de la torre a la altura y (curva exponencial como la original)
+    const W = y => 7 + 123 * Math.pow((y - 60) / 440, 2.3);
+    let thick = "", thin = "", body = "", slab = "", lights = "";
+
+    const rowsY = (y0, y1, k, m) => {
+        const a = [y0]; let y = y0;
+        while (y < y1 - 3) { y = Math.min(y1, y + Math.max(m, Math.min(17, W(y) * k))); a.push(y); }
+        a[a.length - 1] = y1;
+        return a;
+    };
+    const poly = (L, R, ys) =>
+        "M" + ys.map(y => f(L(y)) + " " + f(y)).join("L") + "L" +
+        [...ys].reverse().map(y => f(R(y)) + " " + f(y)).join("L") + "Z";
+
+    // tramo con entramado en X; n = número de "bahías"
+    function lat(y0, y1, L, R, n, k, m = 7) {
+        const ys = rowsY(y0, y1, k, m);
+        const xf = (j, y) => L(y) + (R(y) - L(y)) * j / n;
+        const p = poly(L, R, ys);
+        thick += p; body += p;
+        for (let j = 1; j < n; j++) thin += "M" + ys.map(y => f(xf(j, y)) + " " + f(y)).join("L");
+        ys.forEach(y => thin += `M${f(xf(0, y))} ${f(y)}H${f(xf(n, y))}`);
+        for (let i = 0; i < ys.length - 1; i++) for (let j = 0; j < n; j++) {
+            const a = ys[i], b = ys[i + 1];
+            thin += `M${f(xf(j, a))} ${f(a)}L${f(xf(j + 1, b))} ${f(b)}M${f(xf(j + 1, a))} ${f(a)}L${f(xf(j, b))} ${f(b)}`;
+        }
+    }
+    // plataforma con barandal
+    function plat(y, hw, h) {
+        const d = `M${C - hw} ${y}H${C + hw}V${y + h}H${C - hw}Z`;
+        thick += d; slab += d;
+        thin += `M${C - hw + 2} ${y - 5}H${C + hw - 2}`;
+        for (let x = C - hw + 2; x <= C + hw - 2; x += 6) thin += `M${f(x)} ${y - 5}V${y}`;
+        for (let x = C - hw + 8; x < C + hw - 4; x += 14) lights += `<circle cx="${f(x)}" cy="${y + h + 2}" r="1.5"/>`;
+    }
+
+    // patas (dos visibles) y pedestales
+    const legW = 26;
+    lat(423, 500, y => C - W(y), y => C - W(y) + legW, 1, .5);
+    lat(423, 500, y => C + W(y) - legW, y => C + W(y), 1, .5);
+    slab += `M11 500H55V508H11ZM245 500H289V508H245Z`;
+    thick += `M11 500H55V508H11ZM245 500H289V508H245Z`;
+
+    // gran arco bajo la primera plataforma
+    thick += "M46 500Q150 384 254 500";
+    thin += "M52 490Q150 374 248 490";
+    const archY = x => { const t = (x - 46) / 208; return 500 - 232 * t + 232 * t * t; };
+    for (let x = 58; x <= 242; x += 10) thin += `M${x} 423V${f(archY(x))}`;
+    for (let x = 58; x <= 242; x += 20) lights += `<circle cx="${x}" cy="${f(archY(x) - 5)}" r="1.5"/>`;
+
+    // cuerpo
+    lat(336, 416, y => C - W(y), y => C + W(y), 3, .3);
+    lat(250, 330, y => C - W(y), y => C + W(y), 2, .3);
+    lat(105, 250, y => C - W(y), y => C + W(y), 1, .8, 11);
+    lat(60, 100, y => C - W(y), y => C + W(y), 1, 1, 13);
+
+    // plataformas
+    plat(416, W(416) + 8, 7);
+    plat(330, W(330) + 7, 6);
+    plat(100, W(100) + 6, 5);
+
+    // remate y antena
+    thick += "M143 60L146 52Q150 41 154 52L157 60M150 44V12";
+    thin += "M146 52H154M147 32H153M148 24H152M149 17H151";
+    lights += `<circle cx="150" cy="10" r="2.8"/>`;
+
+    // luces a lo largo de los bordes
+    for (let y = 112; y <= 496; y += 21) {
+        const w = W(y);
+        lights += `<circle cx="${f(C - w)}" cy="${y}" r="1.8"/><circle cx="${f(C + w)}" cy="${y}" r="1.8"/>`;
+    }
+
+    document.getElementById("tower").innerHTML =
+        `<path class="body" d="${body}"/><path class="slab" d="${slab}"/>` +
+        `<path class="iron" d="${thick}"/><path class="iron-thin" d="${thin}"/>` +
+        `<g class="tower-lights" fill="#ffe9a0">${lights}</g>`;
+})();
+
+/* ================= ÁRBOLES Y FAROLAS CON PERSPECTIVA ================= */
+const palettes = [
+    ["#3f6f3a", "#5b8f43", "#86b552", "#b4d474"],
+    ["#4a7a35", "#6d9a3f", "#9bbf55", "#c9dc82"],
+    ["#5a7d33", "#80a043", "#a9c451", "#d6dd7c"]
+];
+// copa hecha de masas redondas: oscuras abajo, claras arriba (luz desde arriba-izquierda)
+const layers = [
+    [[26, 64, 21], [74, 64, 21], [50, 66, 25], [50, 40, 27], [30, 42, 20], [70, 42, 20]],
+    [[28, 58, 17], [70, 56, 17], [50, 58, 20], [48, 34, 22], [32, 38, 15], [66, 36, 15]],
+    [[32, 44, 11], [56, 28, 12], [28, 56, 9], [64, 44, 9], [46, 50, 10]],
+    [[38, 34, 5.5], [58, 24, 5], [30, 48, 4.5]]
+];
+const j = n => (Math.random() - .5) * n;
+
+function treeSVG() {
+    const p = palettes[Math.floor(Math.random() * palettes.length)];
+    const flip = Math.random() < .5 ? ' style="transform:scaleX(-1)"' : "";
+    const canopy = layers.map((L, i) => L.map(c =>
+        `<circle cx="${(c[0] + j(4)).toFixed(1)}" cy="${(c[1] + j(4)).toFixed(1)}" r="${(c[2] * (.93 + Math.random() * .14)).toFixed(1)}" fill="${p[i]}"/>`
+    ).join("")).join("");
+    return `<svg viewBox="0 0 100 140" preserveAspectRatio="xMidYMax meet"${flip}>
+        <ellipse cx="50" cy="139" rx="34" ry="4.5" fill="rgba(30,50,30,.22)"/>
+        <path d="M45 140C46 122 47 108 45 86H55C53 108 54 122 55 140Z" fill="#6a4a35"/>
+        <path d="M45 140C46 122 47 108 45 86H49C48 108 49 122 49 140Z" fill="rgba(255,255,255,.14)"/>
+        <path d="M50 102L36 76M50 97L65 72" stroke="#6a4a35" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <ellipse cx="50" cy="92" rx="20" ry="6" fill="rgba(20,40,20,.25)"/>
+        ${canopy}</svg>`;
+}
+
+function lampSVG() {
+    return `<svg viewBox="0 0 34 120" preserveAspectRatio="xMidYMax meet">
+        <g class="glow"><circle cx="17" cy="28" r="26" fill="rgba(255,214,120,.2)"/><circle cx="17" cy="28" r="14" fill="rgba(255,226,150,.4)"/></g>
+        <g class="metal">
+            <path d="M9 120L12 108H22L25 120Z"/><rect x="13.5" y="102" width="7" height="7" rx="1"/>
+            <path d="M15 104L16 42H18L19 104Z"/><rect x="12" y="68" width="10" height="3" rx="1"/>
+            <path d="M17 66Q6 62 8 52M17 66Q28 62 26 52" fill="none" stroke-width="1.6"/>
+            <rect x="12" y="39" width="10" height="4" rx="1"/>
+            <path d="M7 21L17 9L27 21Z"/><circle cx="17" cy="7" r="2.2"/><rect x="10" y="37" width="14" height="3"/>
+        </g>
+        <path class="glass" d="M11.5 37L9.5 22H24.5L22.5 37Z"/>
+        <path d="M17 22V37M13.5 22L14 37M20.5 22L20 37" stroke="#3a3d3b" stroke-width=".8" fill="none"/>
+    </svg>`;
+}
+
+// árboles: [x%, base%, alto]  — los lejanos suben y se achican, siguiendo el borde del camino
+const side = [[3, -4, 300], [4, 6, 235], [12, 14, 185], [19.5, 21, 145], [26, 27, 115]];
+const items = [];
+side.forEach(([x, b, h], i) => {
+    items.push({ t: "tree", x, b, h });
+    items.push({ t: "tree", x: 100 - x, b: b + .8, h: h * .96 });
+});
+// farolas: sobre el camino, altura ≈ 38% del árbol a esa misma profundidad
+[[13, 4], [24, 17]].forEach(([x, b]) => {
+    const h = .38 * (270 - 6.3 * b);
+    items.push({ t: "lamp", x, b, h });
+    items.push({ t: "lamp", x: 100 - x, b, h });
+});
+items.sort((a, b) => b.b - a.b); // lo lejano primero, lo cercano encima
+items.forEach(o => {
+    const d = document.createElement("div");
+    d.className = o.t;
+    d.style.cssText = `left:${o.x}%;bottom:${o.b}%;--h:${o.h.toFixed(0)}`;
+    d.innerHTML = o.t === "tree" ? treeSVG() : lampSVG();
+    garden.appendChild(d);
+});
+
+/* HOJITAS */
+for (let i = 0; i < 11; i++) {
+    const leaf = document.createElement("span");
+    leaf.className = "leaf";
+    leaf.style.left = (5 + Math.random() * 90) + "%";
+    leaf.style.setProperty("--duration", (9 + Math.random() * 12) + "s");
+    leaf.style.setProperty("--delay", (-Math.random() * 18) + "s");
+    leaves.appendChild(leaf);
+}
+
+/* ABRIR CARTA */
+continueButton.addEventListener("click", () => {
+    letterOverlay.classList.add("show");
+    continueButton.style.opacity = "0";
+    continueButton.style.pointerEvents = "none";
+});
+
+/* CERRAR CARTA Y CAMBIAR A LA NOCHE */
+closeLetter.addEventListener("click", () => {
+    letterOverlay.classList.remove("show");
+    setTimeout(() => scene.classList.add("night"), 850);
+});
+</script>
+</body>
+</html>
